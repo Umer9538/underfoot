@@ -1,4 +1,4 @@
-# driftwatch
+# underfoot
 
 **A public record of what the models inside your phone silently do.**
 
@@ -7,7 +7,7 @@ Apple Foundation Models, Gemini Nano — and swap them underneath your app with
 OS updates. Same prompts, different behavior, no changelog. Developers find
 out from their users.
 
-driftwatch freezes a fixed, versioned prompt suite and captures how the
+underfoot freezes a fixed, versioned prompt suite and captures how the
 OS-bundled model answers it — per OS build, per device — building the time
 series nobody else can reconstruct later: **once an OS build is superseded,
 its model can never be measured again.**
@@ -45,7 +45,7 @@ multilingual coverage, and high-variance creative canaries.
 swift harness/apple/afm_capture.swift datasets/core-v1.json captures
 ```
 
-Writes `captures/apple/<os-build>/driftwatch-core-v1.capture.json`.
+Writes `captures/apple/<os-build>/underfoot-core-v1.capture.json`.
 
 ## Status
 

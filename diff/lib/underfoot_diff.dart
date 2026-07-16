@@ -1,4 +1,4 @@
-/// Compares two driftwatch captures of the same suite and reports which
+/// Compares two underfoot captures of the same suite and reports which
 /// prompts changed behavior between them — refusal flips first, then status
 /// changes, output changes, and coverage changes. The rules mirror vouch's
 /// diff semantics: movement, not state; identical captures produce zero
@@ -234,7 +234,7 @@ class DriftReport {
       ];
 
   Map<String, dynamic> toJson() => {
-        'tool': 'driftwatch',
+        'tool': 'underfoot',
         'formatVersion': 1,
         'suite': suite,
         'suiteVersion': suiteVersion,
@@ -260,7 +260,7 @@ class DriftReport {
 
   String summary() {
     final buffer = StringBuffer()
-      ..writeln('driftwatch: "$suite" v$suiteVersion — '
+      ..writeln('underfoot: "$suite" v$suiteVersion — '
           '${baseline.label} → ${current.label}')
       ..writeln(hasDrift
           ? '  ${findings.length} drifted · $stableCount stable'

@@ -1,5 +1,5 @@
 #!/bin/bash
-# driftwatch — install + run the capture on a connected iPhone, decode the
+# underfoot — install + run the capture on a connected iPhone, decode the
 # console-streamed capture, save it under captures/, and diff it against the
 # macOS baseline. Device must be unlocked and on the same network (or USB).
 #
@@ -9,8 +9,8 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 DEVICE="${1:-4A08EA6E-44A6-53E8-8829-852BEB69AF36}"
 APP="runner/build/ios/iphoneos/Runner.app"
-BUNDLE_ID="com.umer9538.driftwatchRunner"
-CONSOLE_LOG="$(mktemp /tmp/driftwatch-console.XXXXXX)"
+BUNDLE_ID="com.umer9538.underfootRunner"
+CONSOLE_LOG="$(mktemp /tmp/underfoot-console.XXXXXX)"
 
 if [ ! -d "$APP" ]; then
   echo "app not built — running flutter build ios --release first"
@@ -27,20 +27,20 @@ LAUNCH_PID=$!
 
 # Wait for the END marker (or the app/connection dying), up to 20 minutes.
 for _ in $(seq 1 240); do
-  if grep -q "DRIFTWATCH-END" "$CONSOLE_LOG" 2>/dev/null; then break; fi
-  if grep -q "DRIFTWATCH-ERROR" "$CONSOLE_LOG" 2>/dev/null; then break; fi
+  if grep -q "UNDERFOOT-END" "$CONSOLE_LOG" 2>/dev/null; then break; fi
+  if grep -q "UNDERFOOT-ERROR" "$CONSOLE_LOG" 2>/dev/null; then break; fi
   if ! kill -0 "$LAUNCH_PID" 2>/dev/null; then break; fi
   sleep 5
 done
 kill "$LAUNCH_PID" 2>/dev/null || true
 
-if grep -q "DRIFTWATCH-ERROR" "$CONSOLE_LOG"; then
+if grep -q "UNDERFOOT-ERROR" "$CONSOLE_LOG"; then
   echo "capture FAILED on device:"
-  grep "DRIFTWATCH-ERROR" "$CONSOLE_LOG"
+  grep "UNDERFOOT-ERROR" "$CONSOLE_LOG"
   echo "(full console: $CONSOLE_LOG)"
   exit 1
 fi
-if ! grep -q "DRIFTWATCH-END" "$CONSOLE_LOG"; then
+if ! grep -q "UNDERFOOT-END" "$CONSOLE_LOG"; then
   echo "no capture markers seen — console log: $CONSOLE_LOG"
   tail -5 "$CONSOLE_LOG"
   exit 1
@@ -72,6 +72,6 @@ EOF
 
 echo
 echo "=== drift vs macOS baseline ==="
-IOS_CAPTURE=$(ls -t captures/apple/*/driftwatch-core-v1.capture.json | head -1)
-dart diff/bin/driftwatch_diff.dart \
-  captures/apple/25F80/driftwatch-core-v1.capture.json "$IOS_CAPTURE" || true
+IOS_CAPTURE=$(ls -t captures/apple/*/underfoot-core-v1.capture.json | head -1)
+dart diff/bin/underfoot_diff.dart \
+  captures/apple/25F80/underfoot-core-v1.capture.json "$IOS_CAPTURE" || true

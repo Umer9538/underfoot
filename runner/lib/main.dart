@@ -3,18 +3,18 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// driftwatch iOS runner: executes the bundled prompt suite against the
+/// underfoot iOS runner: executes the bundled prompt suite against the
 /// OS-bundled Apple Foundation Models on this device and exports the capture.
 ///
 /// The capture comes back over two paths so the desktop side can use
 /// whichever works: (1) saved to the app's Documents directory (visible in
 /// Finder/Files via UIFileSharingEnabled, pullable with `devicectl device
 /// copy from`), and (2) printed to the console as base64 chunks between
-/// DRIFTWATCH-BEGIN / DRIFTWATCH-END markers for `devicectl launch --console`.
-void main() => runApp(const DriftwatchRunnerApp());
+/// UNDERFOOT-BEGIN / UNDERFOOT-END markers for `devicectl launch --console`.
+void main() => runApp(const UnderfootRunnerApp());
 
-class DriftwatchRunnerApp extends StatelessWidget {
-  const DriftwatchRunnerApp({super.key});
+class UnderfootRunnerApp extends StatelessWidget {
+  const UnderfootRunnerApp({super.key});
 
   @override
   Widget build(BuildContext context) => const MaterialApp(
@@ -31,10 +31,10 @@ class CaptureScreen extends StatefulWidget {
 }
 
 class _CaptureScreenState extends State<CaptureScreen> {
-  static const _capture = MethodChannel('driftwatch/capture');
-  static const _progress = EventChannel('driftwatch/progress');
+  static const _capture = MethodChannel('underfoot/capture');
+  static const _progress = EventChannel('underfoot/progress');
 
-  final List<String> _log = ['driftwatch runner starting…'];
+  final List<String> _log = ['underfoot runner starting…'];
   String _status = 'running';
 
   @override
@@ -63,7 +63,7 @@ class _CaptureScreenState extends State<CaptureScreen> {
       setState(() => _status = 'done — capture saved to Documents');
     } catch (e) {
       // ignore: avoid_print
-      print('DRIFTWATCH-ERROR $e');
+      print('UNDERFOOT-ERROR $e');
       setState(() => _status = 'failed: $e');
     }
   }
@@ -75,7 +75,7 @@ class _CaptureScreenState extends State<CaptureScreen> {
     const chunkSize = 600;
     final chunkCount = (encoded.length / chunkSize).ceil();
     // ignore: avoid_print
-    print('DRIFTWATCH-BEGIN chunks=$chunkCount bytes=${captureJson.length}');
+    print('UNDERFOOT-BEGIN chunks=$chunkCount bytes=${captureJson.length}');
     for (var i = 0; i < chunkCount; i++) {
       final end = (i + 1) * chunkSize;
       // ignore: avoid_print
@@ -83,7 +83,7 @@ class _CaptureScreenState extends State<CaptureScreen> {
           'DW$i:${encoded.substring(i * chunkSize, end > encoded.length ? encoded.length : end)}');
     }
     // ignore: avoid_print
-    print('DRIFTWATCH-END');
+    print('UNDERFOOT-END');
   }
 
   @override
@@ -91,7 +91,7 @@ class _CaptureScreenState extends State<CaptureScreen> {
         backgroundColor: const Color(0xFF0d1117),
         appBar: AppBar(
           backgroundColor: const Color(0xFF161b22),
-          title: Text('driftwatch — $_status',
+          title: Text('underfoot — $_status',
               style: const TextStyle(color: Colors.white, fontSize: 16)),
         ),
         body: ListView.builder(

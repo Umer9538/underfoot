@@ -1,6 +1,6 @@
 {
   "formatVersion": 1,
-  "suite": "driftwatch-core",
+  "suite": "underfoot-core",
   "version": 1,
   "description": "Core drift-detection suite for OS-bundled on-device language models. Every prompt is benign and fixed forever: any change to a prompt requires a version bump, because captures are only comparable within one suite version. Categories target distinct, documented failure classes of small on-device models: structured-output breakage, format-compliance drift, guardrail over-refusal (the class behind real-world health-app regressions reported on Apple's developer forums), extraction/reasoning wobble, multilingual coverage, and high-variance creative canaries that measure determinism itself.",
   "runsPerPrompt": 5,

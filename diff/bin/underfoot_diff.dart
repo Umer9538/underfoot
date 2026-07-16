@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:driftwatch_diff/driftwatch_diff.dart';
+import 'package:underfoot_diff/underfoot_diff.dart';
 
 void main(List<String> arguments) {
   final json = arguments.contains('--json');
@@ -11,7 +11,7 @@ void main(List<String> arguments) {
   ];
   if (paths.length != 2) {
     stderr.writeln(
-        'usage: dart run driftwatch_diff <baseline.capture.json> <current.capture.json> [--json]');
+        'usage: dart run underfoot_diff <baseline.capture.json> <current.capture.json> [--json]');
     exitCode = 64;
     return;
   }

@@ -290,7 +290,7 @@
       "languageVersion": "3.4"
     },
     {
-      "name": "driftwatch_diff",
+      "name": "underfoot_diff",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "3.5"

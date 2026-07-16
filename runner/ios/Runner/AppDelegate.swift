@@ -18,11 +18,11 @@ import UIKit
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
 
     let messenger = engineBridge.applicationRegistrar.messenger()
-    FlutterEventChannel(name: "driftwatch/progress", binaryMessenger: messenger)
+    FlutterEventChannel(name: "underfoot/progress", binaryMessenger: messenger)
       .setStreamHandler(progressHandler)
 
     let captureChannel = FlutterMethodChannel(
-      name: "driftwatch/capture", binaryMessenger: messenger)
+      name: "underfoot/capture", binaryMessenger: messenger)
     captureChannel.setMethodCallHandler { [weak self] call, result in
       guard call.method == "run", let suiteText = call.arguments as? String else {
         result(FlutterMethodNotImplemented)
@@ -206,14 +206,17 @@ final class CaptureEngine {
 
     let osBuild = sysctlString("kern.osversion")
     progress(
-      "driftwatch capture: \(suite.suite) v\(suite.version) on iOS "
+      "underfoot capture: \(suite.suite) v\(suite.version) on iOS "
         + "\(UIDevice.current.systemVersion) (\(osBuild))")
 
+    // A simulator capture must be labeled as one: the model executes via the
+    // host Mac's Apple Intelligence, not phone silicon.
+    let simulatorModel = ProcessInfo.processInfo.environment["SIMULATOR_MODEL_IDENTIFIER"]
     let platform = PlatformMeta(
-      os: "iOS",
+      os: simulatorModel == nil ? "iOS" : "iOS-simulator",
       osVersion: UIDevice.current.systemVersion,
       osBuild: osBuild,
-      hardwareModel: hardwareModel(),
+      hardwareModel: simulatorModel ?? hardwareModel(),
       chip: sysctlString("hw.machine"),
       locale: Locale.current.identifier,
       lowPowerMode: ProcessInfo.processInfo.isLowPowerModeEnabled,
@@ -265,7 +268,7 @@ final class CaptureEngine {
     isoFormatter.timeZone = TimeZone(identifier: "UTC")
     let capture = CaptureDocument(
       formatVersion: 1,
-      tool: "driftwatch",
+      tool: "underfoot",
       suite: suite.suite,
       suiteVersion: suite.version,
       suiteSha256: suiteSha,

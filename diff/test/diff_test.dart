@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-import 'package:driftwatch_diff/driftwatch_diff.dart';
+import 'package:underfoot_diff/underfoot_diff.dart';
 import 'package:test/test.dart';
 
 /// Builds a minimal capture JSON with the given per-prompt runs.
 /// Runs are (status, output) pairs; output is ignored for non-ok statuses.
 Map<String, dynamic> captureJson({
   Map<String, List<(String, String?)>> prompts = const {},
-  String suite = 'driftwatch-core',
+  String suite = 'underfoot-core',
   int suiteVersion = 1,
   String suiteSha256 = 'abc123',
   String osBuild = '25F80',
@@ -15,7 +15,7 @@ Map<String, dynamic> captureJson({
 }) =>
     {
       'formatVersion': 1,
-      'tool': 'driftwatch',
+      'tool': 'underfoot',
       'suite': suite,
       'suiteVersion': suiteVersion,
       'suiteSha256': suiteSha256,
@@ -37,7 +37,7 @@ Map<String, dynamic> captureJson({
 
 Capture capture({
   Map<String, List<(String, String?)>> prompts = const {},
-  String suite = 'driftwatch-core',
+  String suite = 'underfoot-core',
   int suiteVersion = 1,
   String suiteSha256 = 'abc123',
   String osBuild = '25F80',
@@ -195,7 +195,7 @@ void main() {
     final a = capture(prompts: {'p1': okRuns('A'), 'p2': okRuns('B')});
     final b = capture(prompts: {'p1': refusalRuns(), 'p2': okRuns('B')});
     final json = compareCaptures(a, b).toJson();
-    expect(json['tool'], 'driftwatch');
+    expect(json['tool'], 'underfoot');
     expect(json['formatVersion'], 1);
     final counts = json['counts'] as Map<String, dynamic>;
     expect(counts['refusalFlip'], 1);

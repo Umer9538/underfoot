@@ -1,6 +1,6 @@
-// driftwatch — Apple Foundation Models capture harness.
+// underfoot — Apple Foundation Models capture harness.
 //
-// Runs a driftwatch prompt suite against the OS-bundled system language model
+// Runs a underfoot prompt suite against the OS-bundled system language model
 // and writes a versioned capture JSON. Captures are the raw material of the
 // drift time series: once this OS build is superseded, this data can never be
 // re-measured, so the harness records everything needed to trust a capture
@@ -177,7 +177,7 @@ let platform = Platform(
     thermalStateAtStart: thermalStateName(ProcessInfo.processInfo.thermalState)
 )
 
-log("driftwatch capture: \(suite.suite) v\(suite.version) on \(platform.os) \(osVersionString) (\(osBuild))")
+log("underfoot capture: \(suite.suite) v\(suite.version) on \(platform.os) \(osVersionString) (\(osBuild))")
 log("prompts: \(suite.prompts.count) x \(suite.runsPerPrompt) runs, greedy sampling, fresh session per run")
 
 let semaphore = DispatchSemaphore(value: 0)
@@ -218,7 +218,7 @@ Task {
     isoFormatter.timeZone = TimeZone(identifier: "UTC")
     let capture = Capture(
         formatVersion: 1,
-        tool: "driftwatch",
+        tool: "underfoot",
         suite: suite.suite,
         suiteVersion: suite.version,
         suiteSha256: suiteSha,

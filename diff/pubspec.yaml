@@ -1,5 +1,5 @@
-name: driftwatch_diff
-description: Compares two driftwatch captures and reports which prompts silently changed behavior.
+name: underfoot_diff
+description: Compares two underfoot captures and reports which prompts silently changed behavior.
 publish_to: none
 version: 0.1.0
 
