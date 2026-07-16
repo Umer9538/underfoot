@@ -204,7 +204,11 @@ final class CaptureEngine {
       throw CaptureError.modelUnavailable("\(systemModel.availability)")
     }
 
-    let osBuild = sysctlString("kern.osversion")
+    // In a simulator kern.osversion reports the HOST macOS build; the
+    // runtime's own build ships in SIMULATOR_RUNTIME_BUILD_VERSION.
+    let osBuild =
+      ProcessInfo.processInfo.environment["SIMULATOR_RUNTIME_BUILD_VERSION"]
+      ?? sysctlString("kern.osversion")
     progress(
       "underfoot capture: \(suite.suite) v\(suite.version) on iOS "
         + "\(UIDevice.current.systemVersion) (\(osBuild))")
