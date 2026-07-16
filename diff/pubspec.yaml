@@ -1,0 +1,11 @@
+name: driftwatch_diff
+description: Compares two driftwatch captures and reports which prompts silently changed behavior.
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ^3.5.0
+
+dev_dependencies:
+  lints: ^6.0.0
+  test: ^1.25.0
