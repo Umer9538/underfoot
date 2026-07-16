@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  diff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+      - name: Test the diff engine
+        working-directory: diff
+        run: |
+          dart pub get
+          dart format --output=none --set-exit-if-changed .
+          dart analyze --fatal-infos
+          dart test
+      - name: Self-diff of a committed capture is zero findings
+        run: |
+          dart diff/bin/underfoot_diff.dart \
+            captures/apple/25F80/underfoot-core-v1.capture.json \
+            captures/apple/25F80/underfoot-core-v1.capture.json
+      - name: Cross-build diff detects drift (exit 1)
+        run: |
+          if dart diff/bin/underfoot_diff.dart \
+            captures/apple/25F80/underfoot-core-v1.capture.json \
+            captures/apple/23D8133/underfoot-core-v1.capture.json; then
+            echo "expected drift to be detected" && exit 1
+          fi
+      - name: Site is in sync with the captures
+        run: |
+          dart diff/bin/generate_site.dart .
+          git diff --exit-code docs/
